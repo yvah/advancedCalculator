@@ -43,7 +43,7 @@ class Calc:
 
     @staticmethod
     def log(x):
-        return math.log(x, math.e)
+        return math.log(x, 10)
 
     @staticmethod
     def prepare(expression):
