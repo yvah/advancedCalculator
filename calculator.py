@@ -1,3 +1,5 @@
+import typing
+
 import math
 import re
 
@@ -23,19 +25,18 @@ class Calc:
             if i == ')':
                 open_brackets -= 1
             if open_brackets < 0:
-                raise SyntaxError('Amount of opened and closed brackets is not matching.')
-
+                raise SyntaxError('amount of opened and closed brackets is not matching.')
         if open_brackets > 0:
-            raise SyntaxError('Amount of opened and closed brackets is not matching.')
+            raise SyntaxError('amount of opened and closed brackets is not matching.')
 
         x = re.search(r'^(?:(?:[1-9]\d*|0)(?:\.\d*[1-9])?|exp\(|log\(|[+-/*^()])*$', self.expression)
         self.is_valid = not x is None
         if not self.is_valid:
-            raise SyntaxError('Invalid input syntax.')
+            raise SyntaxError('invalid input syntax.')
 
         x = self.expression[0]
         if x == '/' or x == '*':
-            raise SyntaxError("Expression starts with operation: " + x)
+            raise SyntaxError("expression starts with operation: " + x)
 
     @staticmethod
     def exp(x):
@@ -53,12 +54,15 @@ class Calc:
         self.validate()
         return eval(Calc.prepare(self.expression))
 
-    def output(self):
+    def output(self) -> typing.Union[float, str]:
         try:
             return self.calculate()
         except SyntaxError as syntax_error:
-            return syntax_error.msg
+            return f'Syntax error: {syntax_error.msg}'
         except TypeError:
             return 'Wrong input type.'
         except Exception as error:
-            return f'Abnormal exit: Unexpected error has occurred ({error.msg}).'
+            try:
+                return f'Abnormal exit: Unexpected error has occurred ({type(error)} {error.msg}).'
+            except:
+                return f'Abnormal exit: Unexpected error has occurred ({type(error)}).'
