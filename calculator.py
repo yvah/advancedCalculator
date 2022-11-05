@@ -50,17 +50,14 @@ class Calc:
         return expression.replace('^', '**').replace('log', 'Calc.log').replace('exp', 'Calc.exp')
 
     def calculate(self):
-        try:
-            self.validate()
-            return eval(Calc.prepare(self.expression))
-        except Exception as error:
-            return error.msg
+        self.validate()
+        return eval(Calc.prepare(self.expression))
 
     def output(self):
         try:
             return self.calculate()
         except SyntaxError as syntax_error:
-            return self.calculate()
+            return syntax_error.msg
         except TypeError:
             return 'Wrong input type.'
         except Exception as error:
